@@ -16,8 +16,11 @@
           active-icon="none"
         >
           <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="">
-              step1
+            <div class="tw-px-4 tw-py-3">
+              <HeaderForm
+                title="Personal info"
+                subtitle="Please provide your name, email address and phone number."
+              />
             </div>
             <StepperNavigation
               :step="step"
@@ -36,8 +39,11 @@
           active-icon="none"
         >
           <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="">
-              step2
+            <div class="tw-px-4 tw-py-3">
+              <HeaderForm
+                title="Select your plan"
+                subtitle="You have the option of monthly or yearly billing."
+              />
             </div>
             <StepperNavigation
               :step="step"
@@ -56,8 +62,11 @@
           active-icon="none"
         >
           <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="">
-              step3
+            <div class="tw-px-4 tw-py-3">
+              <HeaderForm
+                title="Pick add-ons"
+                subtitle="Add-ons help your gaming experience."
+              />
             </div>
             <StepperNavigation
               :step="step"
@@ -76,8 +85,11 @@
           active-icon="none"
         >
           <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="">
-              step4
+            <div class="tw-px-4 tw-py-3">
+              <HeaderForm
+                title="Finishing up"
+                subtitle="Double-check everything looks OK before confirming."
+              />
             </div>
             <StepperNavigation
               :step="step"
@@ -93,6 +105,7 @@
 
 <script setup>
   import { ref } from 'vue';
+  import HeaderForm from 'src/components/HeaderForm.vue';
   import StepperNavigation from 'src/components/StepperNavigation.vue';
 
   const step = ref(1)
