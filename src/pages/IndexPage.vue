@@ -160,6 +160,39 @@
                   title="Pick add-ons"
                   subtitle="Add-ons help your gaming experience."
                 />
+                <div class="tw-flex tw-flex-col tw-gap-5">
+                  <label
+                    v-for="(addons, index) in addonsOptions"
+                    :key="index"
+                    class="tw-relative"
+                  >
+                    <q-checkbox
+                      v-model="form.addons"
+                      :val="addons.description"
+                      class="step-addons tw-absolute tw-opacity-0 tw-mw-1 tw-mh-1"
+                    />
+                    <div
+                      class="tw-rounded-md tw-cursor-pointer tw-border tw-py-4 tw-px-5 tw-border-light-gray hover:tw-border-purplish-blue focus:tw-border-purplish-blue tw-transition-all tw-flex tw-items-center tw-gap-6"
+                    >
+                      <div>
+                        <q-checkbox
+                          v-model="form.addons"
+                          :val="addons.description"
+                          class="custom-check"
+                        />
+                      </div>
+                      <div class="tw-flex-1">
+                        <h3 class="tw-text-marine-blue tw-font-medium tw-text-base">
+                          {{ addons.title }}
+                        </h3>
+                        <span class="tw-text-cool-gray">{{ addons.description }}</span>
+                      </div>
+                      <span class="tw-text-purplish-blue">
+                        ${{ form.plan_yearly ? `${addons.yearly}/yr` : `${addons.monthly}/mo`}}
+                      </span>
+                    </div>
+                  </label>
+                </div>
               </div>
               <StepperNavigation
                 :step="step"
@@ -205,7 +238,7 @@
 
   const stepper = ref(null);
 
-  const step = ref(1)
+  const step = ref(3)
 
   const step1RefNname = ref(null)
   const step1RefEmail = ref(null)
@@ -218,6 +251,7 @@
     phone: '',
     plan: 'arcade',
     plan_yearly: false,
+    addons: [],
   })
 
   const plansOptions = [
@@ -244,6 +278,27 @@
       yearly: '150',
       label_promo: '2 months free',
       icon: 'img:src/assets/icon-pro.svg'
+    },
+  ]
+
+  const addonsOptions = [
+    {
+      title: 'Online service',
+      description: 'Access to muktiokayer games',
+      monthly: '1',
+      yearly: '10',
+    },
+    {
+      title: 'Large storage',
+      description: 'Extra 1TB of cloud save',
+      monthly: '2',
+      yearly: '20',
+    },
+    {
+      title: 'Customizable profile',
+      description: 'Custom theme on your profile',
+      monthly: '2',
+      yearly: '20',
     },
   ]
 
@@ -443,6 +498,30 @@
       width: 12px;
       height: 12px;
       top: 16px;
+    }
+  }
+
+  .custom-check {
+    .q-checkbox__bg {
+      border-radius: 4px;
+      border-width: 1px;
+      border-color: hsl(229, 24%, 87%);
+    }
+  }
+
+  .step-addons[aria-checked="true"] + div {
+    border-color: hsl(243, 100%, 62%);
+    background-color: hsl(217, 100%, 97%);
+
+    .custom-check {
+      .q-checkbox__bg {
+        background-color: hsl(243, 100%, 62%);
+        border-color: hsl(243, 100%, 62%);
+
+        svg {
+          transform: scale(0.7);
+        }
+      }
     }
   }
 </style>
