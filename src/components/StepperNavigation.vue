@@ -11,9 +11,11 @@
       />
     </div>
     <q-btn
-    :label="step === 4 ? 'Confirm' : 'Next Step'"
-    class="tw-bg-marine-blue tw-text-white tw-normal-case tw-text-base tw-px-5 tw-py-3 tw-min-w-[120px] tw-rounded-lg"
-    @click="handleClickNextStep"
+      :label="step === 4 ? 'Confirm' : 'Next Step'"
+      class="tw-text-white tw-normal-case tw-text-base tw-px-5 tw-py-3 tw-min-w-[120px] tw-rounded-lg"
+      :class="step === 4 ? 'tw-bg-purplish-blue' : 'tw-bg-marine-blue'"
+      @click="handleClickNextStep"
+      unelevated
     />
   </q-stepper-navigation>
 </template>
