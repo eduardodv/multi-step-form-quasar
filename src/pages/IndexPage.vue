@@ -19,12 +19,11 @@
             <div class="">
               step1
             </div>
-            <q-stepper-navigation class="tw-flex tw-justify-between">
-              <div>
-                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-              </div>
-              <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Confirm' : 'Next Step'" />
-            </q-stepper-navigation>
+            <StepperNavigation
+              :step="step"
+              @handleClickNextStep="clickNextStep($refs.stepper)"
+              @handleClickPrevStep="clickPrevStep($refs.stepper)"
+            />
           </div>
         </q-step>
 
@@ -36,16 +35,15 @@
           color="transparent"
           active-icon="none"
         >
-        <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
+          <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
             <div class="">
               step2
             </div>
-            <q-stepper-navigation class="tw-flex tw-justify-between">
-              <div>
-                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-              </div>
-              <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Confirm' : 'Next Step'" />
-            </q-stepper-navigation>
+            <StepperNavigation
+              :step="step"
+              @handleClickNextStep="clickNextStep($refs.stepper)"
+              @handleClickPrevStep="clickPrevStep($refs.stepper)"
+            />
           </div>
         </q-step>
 
@@ -61,12 +59,11 @@
             <div class="">
               step3
             </div>
-            <q-stepper-navigation class="tw-flex tw-justify-between">
-              <div>
-                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-              </div>
-              <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Confirm' : 'Next Step'" />
-            </q-stepper-navigation>
+            <StepperNavigation
+              :step="step"
+              @handleClickNextStep="clickNextStep($refs.stepper)"
+              @handleClickPrevStep="clickPrevStep($refs.stepper)"
+            />
           </div>
         </q-step>
 
@@ -78,16 +75,15 @@
           color="transparent"
           active-icon="none"
         >
-        <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
+          <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
             <div class="">
               step4
             </div>
-            <q-stepper-navigation class="tw-flex tw-justify-between">
-              <div>
-                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-              </div>
-              <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Confirm' : 'Next Step'" />
-            </q-stepper-navigation>
+            <StepperNavigation
+              :step="step"
+              @handleClickNextStep="clickNextStep($refs.stepper)"
+              @handleClickPrevStep="clickPrevStep($refs.stepper)"
+            />
           </div>
         </q-step>
       </q-stepper>
@@ -97,6 +93,7 @@
 
 <script setup>
   import { ref } from 'vue';
+  import StepperNavigation from 'src/components/StepperNavigation.vue';
 
   const step = ref(1)
   const done1 = ref(false)
@@ -105,6 +102,14 @@
 
   function boxHeight () {
     return { minHeight: 0 }
+  }
+
+  function clickPrevStep (prevRef) {
+    prevRef.previous()
+  }
+
+  function clickNextStep (nextRef) {
+    nextRef.next()
   }
 </script>
 
@@ -182,5 +187,17 @@
         letter-spacing: 1px;
       }
     }
+  }
+
+  .q-stepper__nav {
+    .q-btn--flat {
+      .q-focus-helper {
+        display: none;
+      }
+    }
+  }
+
+  .q-stepper--horizontal .q-stepper__step-inner {
+    padding: 1rem 5rem;
   }
 </style>
