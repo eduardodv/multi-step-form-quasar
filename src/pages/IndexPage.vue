@@ -88,6 +88,55 @@
                   title="Select your plan"
                   subtitle="You have the option of monthly or yearly billing."
                 />
+                <div class="tw-grid tw-grid-cols-3 tw-gap-5">
+                  <label
+                    v-for="(plan, index) in plansOptions"
+                    :key="index"
+                    class="tw-relative"
+                  >
+                    <q-radio
+                      v-model="form.plan"
+                      :val="plan.value"
+                      :name="plan.value"
+                      class="step-plan tw-absolute tw-opacity-0 tw-mw-1 tw-mh-1"
+                    />
+                      <div
+                        class="block tw-rounded-md tw-cursor-pointer tw-border tw-p-4 tw-border-light-gray hover:tw-border-purplish-blue focus:tw-border-purplish-blue tw-transition-all"
+                      >
+                      <q-icon
+                        :name="plan.icon"
+                        size="40px"
+                      />
+                      <h3 class="tw-text-marine-blue tw-mt-10 tw-font-medium tw-text-base">
+                        {{ plan.label }}
+                      </h3>
+                      <span class="tw-text-cool-gray tw-block">
+                        ${{ form.plan_yearly ? `${plan.yearly}/yr` : `${plan.monthly}/mo`}}
+                      </span>
+                      <span v-if="form.plan_yearly" class="tw-text-marine-blue tw-text-xs">
+                        {{ plan.label_promo }}
+                      </span>
+                    </div>
+                  </label>
+                </div>
+                <div class="tw-w-full tw-gap-3 tw-flex tw-items-center tw-justify-center tw-bg-magnolia tw-mt-9 tw-rounded-md tw-p-1">
+                  <span
+                    class="tw-font-medium"
+                    :class="!!form.plan_yearly ? 'tw-text-cool-gray' : 'w-text-marine-blue'"
+                  >
+                    Monthly
+                  </span>
+                  <q-toggle
+                    v-model="form.plan_yearly"
+                    class="custom-toggle"
+                  />
+                  <span
+                    class="tw-font-medium"
+                    :class="form.plan_yearly ? 'tw-text-marine-blue' : 'tw-text-cool-gray'"
+                  >
+                    Yearly
+                  </span>
+                </div>
               </div>
               <StepperNavigation
                 :step="step"
@@ -167,7 +216,36 @@
     name: '',
     email: '',
     phone: '',
+    plan: 'arcade',
+    plan_yearly: false,
   })
+
+  const plansOptions = [
+    {
+      label: 'Arcade',
+      value: 'arcade',
+      monthly: '9',
+      yearly: '90',
+      label_promo: '2 months free',
+      icon: 'img:src/assets/icon-arcade.svg'
+    },
+    {
+      label: 'Advanced',
+      value: 'advanced',
+      monthly: '12',
+      yearly: '120',
+      label_promo: '2 months free',
+      icon: 'img:src/assets/icon-advanced.svg'
+    },
+    {
+      label: 'Pro',
+      value: 'pro',
+      monthly: '15',
+      yearly: '150',
+      label_promo: '2 months free',
+      icon: 'img:src/assets/icon-pro.svg'
+    },
+  ]
 
   function boxHeight () {
     return { minHeight: 0 }
@@ -186,6 +264,13 @@
         if(!step1RefNname.value.hasError && !step1RefEmail.value.hasError && !step1RefPhone.value.hasError) {
           stepper.value.next()
         }
+        break;
+
+      case 2:
+        stepper.value.next()
+        break;
+      case 3:
+        stepper.value.next()
         break;
       default:
         formRef.value.submit()
@@ -319,6 +404,45 @@
         }
       }
     }
+  }
 
+  .step-plan[aria-checked="true"] + div {
+    border-color: hsl(243, 100%, 62%);
+    background-color: hsl(217, 100%, 97%);
+  }
+
+  .custom-toggle {
+    .q-toggle__inner {
+      width: 60px;
+
+      &--falsy {
+        .q-toggle__thumb {
+          left: 16px;
+        }
+      }
+
+      &--truthy {
+        .q-toggle__thumb {
+          left: 32px;
+
+          &:after {
+            background-color: #fff;
+          }
+        }
+      }
+    }
+
+    .q-toggle__track {
+      min-height: 19px;
+      border-radius: 15px;
+      opacity: 1;
+      background-color: hsl(213, 96%, 18%);
+    }
+
+    .q-toggle__thumb {
+      width: 12px;
+      height: 12px;
+      top: 16px;
+    }
   }
 </style>
