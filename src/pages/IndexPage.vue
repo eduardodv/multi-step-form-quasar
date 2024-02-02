@@ -238,7 +238,7 @@
 
   const stepper = ref(null);
 
-  const step = ref(3)
+  const step = ref(1)
 
   const step1RefNname = ref(null)
   const step1RefEmail = ref(null)
