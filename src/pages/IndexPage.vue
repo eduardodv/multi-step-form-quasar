@@ -1,104 +1,149 @@
 <template>
   <q-page :style-fn="boxHeight">
     <div class="tw-bg-white tw-shadow-md tw-rounded-xl tw-overflow-hidden">
-      <q-stepper
-        v-model="step"
-        ref="stepper"
-        class="tw-flex tw-p-4 tw-rounded-none"
-        header-class="custom-steps"
+      <q-form
+        @submit="submitForm"
+        greedy
+        ref="formRef"
       >
-        <q-step
-          :name="1"
-          title="step 1"
-          caption="Your info"
-          :done="done1"
-          color="transparent"
-          active-icon="none"
+        <q-stepper
+          v-model="step"
+          ref="stepper"
+          class="tw-flex tw-p-4 tw-rounded-none"
+          header-class="custom-steps"
         >
-          <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="tw-px-4 tw-py-3">
-              <HeaderForm
-                title="Personal info"
-                subtitle="Please provide your name, email address and phone number."
+          <q-step
+            :name="1"
+            title="step 1"
+            caption="Your info"
+            :done="step > 1"
+            color="transparent"
+            active-icon="none"
+          >
+            <div class="tw-min-h-[520px] tw-flex tw-flex-col tw-justify-between">
+              <div class="tw-pl-4 tw-py-3">
+                <HeaderForm
+                  title="Personal info"
+                  subtitle="Please provide your name, email address and phone number."
+                />
+                <div class="form-input">
+                  <span class="tw-mb-1 tw-block tw-text-marine-blue">Name</span>
+                  <q-input
+                    ref="step1RefNname"
+                    v-model="form.name"
+                    placeholder="e.g. Stephen King"
+                    outlined
+                    input-class="tw-font-medium tw-text-base tw-text-marine-blue placeholder:tw-text-cool-gray placeholder:tw-opacity-100"
+                    :rules="[
+                      val => val && val.length > 0 || 'This field is required',
+                    ]"
+                  />
+                  <span class="tw-mb-1 tw-block tw-text-marine-blue">E-mail address</span>
+                  <q-input
+                    ref="step1RefEmail"
+                    v-model="form.email"
+                    placeholder="e.g. stephenking@lorem.com"
+                    outlined
+                    input-class="tw-font-medium tw-text-base tw-text-marine-blue placeholder:tw-text-cool-gray placeholder:tw-opacity-100"
+                    :rules="[
+                      val => val && val.length > 0 || 'This field is required',
+                      val => val && validateEmail(val) || 'Please enter a valid email address'
+                    ]"
+                  />
+                  <span class="tw-mb-1 tw-block tw-text-marine-blue">Phone Number</span>
+                  <q-input
+                    ref="step1RefPhone"
+                    v-model="form.phone"
+                    placeholder="e.g. (12) 3456-7890"
+                    outlined
+                    input-class="tw-font-medium tw-text-base tw-text-marine-blue placeholder:tw-text-cool-gray placeholder:tw-opacity-100"
+                    mask="(##) ####-#####"
+                    unmasked-value
+                    :rules="[
+                      val => val && val.length > 0 || 'This field is required',
+                      val => val && val.length > 9 || 'Please enter a valid phone number'
+                    ]"
+                  />
+                </div>
+              </div>
+              <StepperNavigation
+                :step="step"
+                @handleClickNextStep="clickNextStep"
+                @handleClickPrevStep="clickPrevStep"
               />
             </div>
-            <StepperNavigation
-              :step="step"
-              @handleClickNextStep="clickNextStep($refs.stepper)"
-              @handleClickPrevStep="clickPrevStep($refs.stepper)"
-            />
-          </div>
-        </q-step>
+          </q-step>
 
-        <q-step
-          :name="2"
-          title="step 2"
-          caption="Select plan"
-          :done="done2"
-          color="transparent"
-          active-icon="none"
-        >
-          <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="tw-px-4 tw-py-3">
-              <HeaderForm
-                title="Select your plan"
-                subtitle="You have the option of monthly or yearly billing."
+          <q-step
+            :name="2"
+            title="step 2"
+            caption="Select plan"
+            :done="step > 2"
+            color="transparent"
+            active-icon="none"
+          >
+            <div class="tw-min-h-[520px] tw-flex tw-flex-col tw-justify-between">
+              <div class="tw-pl-4 tw-py-3">
+                <HeaderForm
+                  title="Select your plan"
+                  subtitle="You have the option of monthly or yearly billing."
+                />
+              </div>
+              <StepperNavigation
+                :step="step"
+                @handleClickNextStep="clickNextStep"
+                @handleClickPrevStep="clickPrevStep"
               />
             </div>
-            <StepperNavigation
-              :step="step"
-              @handleClickNextStep="clickNextStep($refs.stepper)"
-              @handleClickPrevStep="clickPrevStep($refs.stepper)"
-            />
-          </div>
-        </q-step>
+          </q-step>
 
-        <q-step
-          :name="3"
-          title="step 3"
-          caption="Add-ons"
-          :done="done3"
-          color="transparent"
-          active-icon="none"
-        >
-          <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="tw-px-4 tw-py-3">
-              <HeaderForm
-                title="Pick add-ons"
-                subtitle="Add-ons help your gaming experience."
+          <q-step
+            :name="3"
+            title="step 3"
+            caption="Add-ons"
+            :done="step > 3"
+            color="transparent"
+            active-icon="none"
+          >
+            <div class="tw-min-h-[520px] tw-flex tw-flex-col tw-justify-between">
+              <div class="tw-pl-4 tw-py-3">
+                <HeaderForm
+                  title="Pick add-ons"
+                  subtitle="Add-ons help your gaming experience."
+                />
+              </div>
+              <StepperNavigation
+                :step="step"
+                @handleClickNextStep="clickNextStep"
+                @handleClickPrevStep="clickPrevStep"
               />
             </div>
-            <StepperNavigation
-              :step="step"
-              @handleClickNextStep="clickNextStep($refs.stepper)"
-              @handleClickPrevStep="clickPrevStep($refs.stepper)"
-            />
-          </div>
-        </q-step>
+          </q-step>
 
-        <q-step
-          :name="4"
-          title="step 4"
-          caption="Summary"
-          :done="done2"
-          color="transparent"
-          active-icon="none"
-        >
-          <div class="tw-min-h-[480px] tw-flex tw-flex-col tw-justify-between">
-            <div class="tw-px-4 tw-py-3">
-              <HeaderForm
-                title="Finishing up"
-                subtitle="Double-check everything looks OK before confirming."
+          <q-step
+            :name="4"
+            title="step 4"
+            caption="Summary"
+            :done="step > 4"
+            color="transparent"
+            active-icon="none"
+          >
+            <div class="tw-min-h-[520px] tw-flex tw-flex-col tw-justify-between">
+              <div class="tw-pl-4 tw-py-3">
+                <HeaderForm
+                  title="Finishing up"
+                  subtitle="Double-check everything looks OK before confirming."
+                />
+              </div>
+              <StepperNavigation
+                :step="step"
+                @handleClickNextStep="clickNextStep"
+                @handleClickPrevStep="clickPrevStep"
               />
             </div>
-            <StepperNavigation
-              :step="step"
-              @handleClickNextStep="clickNextStep($refs.stepper)"
-              @handleClickPrevStep="clickPrevStep($refs.stepper)"
-            />
-          </div>
-        </q-step>
-      </q-stepper>
+          </q-step>
+        </q-stepper>
+      </q-form>
     </div>
   </q-page>
 </template>
@@ -107,22 +152,51 @@
   import { ref } from 'vue';
   import HeaderForm from 'src/components/HeaderForm.vue';
   import StepperNavigation from 'src/components/StepperNavigation.vue';
+  import { validateEmail } from 'src/utils/formater'
+
+  const stepper = ref(null);
 
   const step = ref(1)
-  const done1 = ref(false)
-  const done2 = ref(false)
-  const done3 = ref(false)
+
+  const step1RefNname = ref(null)
+  const step1RefEmail = ref(null)
+  const step1RefPhone = ref(null)
+
+  const formRef = ref(null)
+  const form = ref({
+    name: '',
+    email: '',
+    phone: '',
+  })
 
   function boxHeight () {
     return { minHeight: 0 }
   }
 
-  function clickPrevStep (prevRef) {
-    prevRef.previous()
+  function clickPrevStep () {
+    stepper.value.previous()
   }
 
-  function clickNextStep (nextRef) {
-    nextRef.next()
+  function clickNextStep () {
+    switch (step.value){
+      case 1:
+        step1RefNname.value.validate()
+        step1RefEmail.value.validate()
+        step1RefPhone.value.validate()
+        if(!step1RefNname.value.hasError && !step1RefEmail.value.hasError && !step1RefPhone.value.hasError) {
+          stepper.value.next()
+        }
+        break;
+      default:
+        formRef.value.submit()
+        break;
+    }
+  }
+
+  function submitForm () {
+    // console.log(`Form submitted with values: ${form.value}`)
+    // formRef.value.submit()
+    console.log('Send');
   }
 </script>
 
@@ -212,5 +286,39 @@
 
   .q-stepper--horizontal .q-stepper__step-inner {
     padding: 1rem 5rem;
+  }
+
+  .form-input {
+    .q-field {
+      .q-field__control {
+        border-radius: 10px;
+
+        &::before, &::after {
+          border-width: 1px !important;
+          border-color: hsl(229, 24%, 87%);
+        }
+      }
+
+      .q-field__bottom {
+        padding: 4px 0 0 0;
+      }
+
+      &.q-field--focused, &.q-field--highlighted {
+        .q-field__control {
+          &::before, &::after {
+            border-color: hsl(243, 100%, 62%);
+          }
+        }
+      }
+
+      &.q-field--error {
+        .q-field__control {
+          &::before, &::after {
+            border-color: red;
+          }
+        }
+      }
+    }
+
   }
 </style>

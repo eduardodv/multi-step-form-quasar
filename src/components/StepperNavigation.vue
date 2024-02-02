@@ -24,7 +24,8 @@
   import { defineEmits } from 'vue'
 
   defineProps({
-    step: Number
+    step: Number,
+    isValid: Boolean
   })
 
   const emit = defineEmits(['handleClickPrevStep, handleClickNextStep'])
