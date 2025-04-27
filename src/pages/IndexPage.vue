@@ -261,6 +261,29 @@
               />
             </div>
           </q-step>
+
+          <q-step
+            :name="5"
+            title="step 5"
+            caption="Thank you!"
+            :done="step > 5"
+            color="transparent"
+            active-icon="none"
+          >
+            <div class="tw-min-h-[520px] tw-flex tw-flex-col tw-justify-center">
+              <div class="tw-text-center">
+                <img
+                  src="src/assets/icon-thank-you.svg"
+                  alt="Thank you"
+                  class="tw-m-auto tw-mb-4"
+                />
+                <HeaderForm
+                  title="Thank you!"
+                  subtitle="Thank you for confirming your subscription! We hope you have fun using our platform. If you ever need support, please feel free to email us at support@loremgaming.com."
+                />
+              </div>
+            </div>
+          </q-step>
         </q-stepper>
       </q-form>
     </div>
@@ -369,23 +392,18 @@
           stepper.value.next()
         }
         break
-
-      case 2:
+      case 4:
         stepper.value.next()
-        break
-      case 3:
-        stepper.value.next()
+        formRef.value.submit()
         break
       default:
-        formRef.value.submit()
+        stepper.value.next()
         break
     }
   }
 
   function submitForm () {
-    // console.log(`Form submitted with values: ${form.value}`)
-    // formRef.value.submit()
-    console.log('Send')
+    console.log('Form submitted with values:', form.value)
   }
 </script>
 
@@ -437,6 +455,7 @@
 
       &:last-child {
         justify-content: flex-start;
+        display: none;
       }
 
       &--active {
