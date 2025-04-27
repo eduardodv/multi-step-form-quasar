@@ -104,7 +104,7 @@
                         class="block tw-rounded-md tw-cursor-pointer tw-border tw-p-4 tw-border-light-gray hover:tw-border-purplish-blue focus:tw-border-purplish-blue tw-transition-all"
                       >
                       <q-icon
-                        :name="plan.icon"
+                        :name="getPlanIcon(plan.value)"
                         size="40px"
                       />
                       <h3 class="tw-text-marine-blue tw-mt-10 tw-font-medium tw-text-base">
@@ -273,7 +273,7 @@
             <div class="tw-min-h-[520px] tw-flex tw-flex-col tw-justify-center">
               <div class="tw-text-center">
                 <img
-                  src="src/assets/icon-thank-you.svg"
+                  :src="iconThankYou"
                   alt="Thank you"
                   class="tw-m-auto tw-mb-4"
                 />
@@ -296,6 +296,11 @@
   import StepperNavigation from 'src/components/StepperNavigation.vue'
   import { validateEmail } from 'src/utils/formater'
 
+  import iconArcade from 'src/assets/icon-arcade.svg'
+  import iconAdvanced from 'src/assets/icon-advanced.svg'
+  import iconPro from 'src/assets/icon-pro.svg'
+  import iconThankYou from 'src/assets/icon-thank-you.svg'
+
   const stepper = ref(null)
 
   const step = ref(1)
@@ -310,24 +315,21 @@
       value: 'arcade',
       monthly: 9,
       yearly: 90,
-      label_promo: '2 months free',
-      icon: 'img:src/assets/icon-arcade.svg'
+      label_promo: '2 months free'
     },
     {
       label: 'Advanced',
       value: 'advanced',
       monthly: 12,
       yearly: 120,
-      label_promo: '2 months free',
-      icon: 'img:src/assets/icon-advanced.svg'
+      label_promo: '2 months free'
     },
     {
       label: 'Pro',
       value: 'pro',
       monthly: 15,
       yearly: 150,
-      label_promo: '2 months free',
-      icon: 'img:src/assets/icon-pro.svg'
+      label_promo: '2 months free'
     },
   ]
 
@@ -380,6 +382,19 @@
 
   function clickPrevStep () {
     stepper.value.previous()
+  }
+
+  function getPlanIcon (plan) {
+    switch (plan) {
+      case 'arcade':
+        return 'img:' + iconArcade
+      case 'advanced':
+        return 'img:' + iconAdvanced
+      case 'pro':
+        return 'img:' + iconPro
+      default:
+        return ''
+    }
   }
 
   function clickNextStep () {
