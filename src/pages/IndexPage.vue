@@ -29,7 +29,7 @@
                 <div class="form-input">
                   <span class="tw-mb-1 tw-block tw-text-marine-blue">Name</span>
                   <q-input
-                    ref="step1RefNname"
+                    ref="step1RefName"
                     v-model="form.name"
                     placeholder="e.g. Stephen King"
                     outlined
@@ -96,7 +96,7 @@
                   >
                     <q-radio
                       v-model="form.plan"
-                      :val="plan.value"
+                      :val="plan"
                       :name="plan.value"
                       class="step-plan tw-absolute tw-opacity-0 tw-mw-1 tw-mh-1"
                     />
@@ -168,7 +168,7 @@
                   >
                     <q-checkbox
                       v-model="form.addons"
-                      :val="addons.description"
+                      :val="addons"
                       class="step-addons tw-absolute tw-opacity-0 tw-mw-1 tw-mh-1"
                     />
                     <div
@@ -177,7 +177,7 @@
                       <div>
                         <q-checkbox
                           v-model="form.addons"
-                          :val="addons.description"
+                          :val="addons"
                           class="custom-check"
                         />
                       </div>
@@ -216,6 +216,43 @@
                   title="Finishing up"
                   subtitle="Double-check everything looks OK before confirming."
                 />
+                <div class="tw-bg-magnolia tw-rounded-md tw-p-5">
+                  <div class="tw-flex tw-space-between tw-items-center tw-justify-between">
+                    <div class="tw-flex tw-flex-col tw-items-start">
+                      <b class="tw-text-base tw-text-marine-blue">
+                        {{ form.plan.label }}
+                        ({{ form.plan_yearly ? 'Yearly' : 'Monthly' }})
+                      </b>
+                      <button
+                        @click="step = 2"
+                        class="tw-text-cool-gray tw-underline hover:tw-text-marine-blue tw-transition-all">
+                        Change
+                      </button>
+                    </div>
+                    <b class="tw-text-base tw-text-marine-blue">
+                      {{form.plan_yearly ? `$${form.plan.yearly}/yr` : `$${form.plan.monthly}/mo`}}
+                    </b>
+                  </div>
+                  <template v-if="form.addons.length">
+                    <hr class="tw-my-4 tw-border-light-gray" />
+                    <div v-for="(addons, index) in form.addons" :key="index">
+                      <div class="tw-flex tw-items-center tw-justify-between tw-mt-3">
+                      <span class="tw-text-cool-gray">{{ addons.title }}</span>
+                      <span class="tw-text-marine-blue">
+                        {{form.plan_yearly ? `+$${addons.yearly}/yr` : `+$${addons.monthly}/mo`}}
+                      </span>
+                    </div>
+                  </div>
+                  </template>
+                </div>
+                <div class="tw-flex tw-justify-between tw-items-center tw-p-5 tw-mt-2">
+                  <span class="tw-text-cool-gray">
+                    Total (per {{ form.plan_yearly ? 'year' : 'month' }})
+                  </span>
+                  <b class="tw-text-xl tw-text-purplish-blue">
+                    +${{ totalPrice }}/{{ form.plan_yearly ? 'yr' : 'mo' }}
+                  </b>
+                </div>
               </div>
               <StepperNavigation
                 :step="step"
@@ -231,51 +268,41 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import HeaderForm from 'src/components/HeaderForm.vue';
-  import StepperNavigation from 'src/components/StepperNavigation.vue';
+  import { computed, ref, watch } from 'vue'
+  import HeaderForm from 'src/components/HeaderForm.vue'
+  import StepperNavigation from 'src/components/StepperNavigation.vue'
   import { validateEmail } from 'src/utils/formater'
 
-  const stepper = ref(null);
+  const stepper = ref(null)
 
   const step = ref(1)
 
-  const step1RefNname = ref(null)
+  const step1RefName = ref(null)
   const step1RefEmail = ref(null)
   const step1RefPhone = ref(null)
-
-  const formRef = ref(null)
-  const form = ref({
-    name: '',
-    email: '',
-    phone: '',
-    plan: 'arcade',
-    plan_yearly: false,
-    addons: [],
-  })
 
   const plansOptions = [
     {
       label: 'Arcade',
       value: 'arcade',
-      monthly: '9',
-      yearly: '90',
+      monthly: 9,
+      yearly: 90,
       label_promo: '2 months free',
       icon: 'img:src/assets/icon-arcade.svg'
     },
     {
       label: 'Advanced',
       value: 'advanced',
-      monthly: '12',
-      yearly: '120',
+      monthly: 12,
+      yearly: 120,
       label_promo: '2 months free',
       icon: 'img:src/assets/icon-advanced.svg'
     },
     {
       label: 'Pro',
       value: 'pro',
-      monthly: '15',
-      yearly: '150',
+      monthly: 15,
+      yearly: 150,
       label_promo: '2 months free',
       icon: 'img:src/assets/icon-pro.svg'
     },
@@ -284,23 +311,45 @@
   const addonsOptions = [
     {
       title: 'Online service',
-      description: 'Access to muktiokayer games',
-      monthly: '1',
-      yearly: '10',
+      description: 'Access to multiplayer games',
+      monthly: 1,
+      yearly: 10,
     },
     {
       title: 'Large storage',
       description: 'Extra 1TB of cloud save',
-      monthly: '2',
-      yearly: '20',
+      monthly: 2,
+      yearly: 20,
     },
     {
       title: 'Customizable profile',
       description: 'Custom theme on your profile',
-      monthly: '2',
-      yearly: '20',
+      monthly: 2,
+      yearly: 20,
     },
   ]
+
+  const formRef = ref(null)
+  const form = ref({
+    name: '',
+    email: '',
+    phone: '',
+    plan: plansOptions[0],
+    plan_yearly: false,
+    addons: [],
+  })
+
+  const totalPrice = computed(() => {
+    const planPrice = form.value.plan_yearly
+      ? form.value?.plan?.yearly
+      : form.value?.plan?.monthly
+
+    const totalAddonsPrice = form.value.addons.reduce((acc, addon) => {
+      return acc + (form.value.plan_yearly ? addon.yearly : addon.monthly)
+    }, 0)
+
+    return planPrice + totalAddonsPrice
+  })
 
   function boxHeight () {
     return { minHeight: 0 }
@@ -313,30 +362,30 @@
   function clickNextStep () {
     switch (step.value){
       case 1:
-        step1RefNname.value.validate()
+        step1RefName.value.validate()
         step1RefEmail.value.validate()
         step1RefPhone.value.validate()
-        if(!step1RefNname.value.hasError && !step1RefEmail.value.hasError && !step1RefPhone.value.hasError) {
+        if(!step1RefName.value.hasError && !step1RefEmail.value.hasError && !step1RefPhone.value.hasError) {
           stepper.value.next()
         }
-        break;
+        break
 
       case 2:
         stepper.value.next()
-        break;
+        break
       case 3:
         stepper.value.next()
-        break;
+        break
       default:
         formRef.value.submit()
-        break;
+        break
     }
   }
 
   function submitForm () {
     // console.log(`Form submitted with values: ${form.value}`)
     // formRef.value.submit()
-    console.log('Send');
+    console.log('Send')
   }
 </script>
 
