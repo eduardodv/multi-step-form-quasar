@@ -218,21 +218,27 @@
                 />
                 <div class="tw-bg-magnolia tw-rounded-md tw-p-5">
                   <div class="tw-flex tw-space-between tw-items-center tw-justify-between">
-                    <div class="tw-flex tw-flex-col tw-items-start tw-gap-1">
-                      <span class="">
+                    <div class="tw-flex tw-flex-col tw-items-start">
+                      <b class="tw-text-base tw-text-marine-blue">
                         {{ form.plan.label }}
                         ({{ form.plan_yearly ? 'Yearly' : 'Monthly' }})
-                      </span>
-                      <button class="" @click="step = 2">Change</button>
+                      </b>
+                      <button
+                        @click="step = 2"
+                        class="tw-text-cool-gray tw-underline hover:tw-text-marine-blue tw-transition-all">
+                        Change
+                      </button>
                     </div>
-                    <b>{{form.plan_yearly ? `$${form.plan.yearly}/yr` : `$${form.plan.monthly}/mo`}}</b>
+                    <b class="tw-text-base tw-text-marine-blue">
+                      {{form.plan_yearly ? `$${form.plan.yearly}/yr` : `$${form.plan.monthly}/mo`}}
+                    </b>
                   </div>
                   <template v-if="form.addons.length">
-                    <hr class="tw-my-4" />
+                    <hr class="tw-my-4 tw-border-light-gray" />
                     <div v-for="(addons, index) in form.addons" :key="index">
                       <div class="tw-flex tw-items-center tw-justify-between tw-mt-3">
-                      <span>{{ addons.title }}</span>
-                      <span>
+                      <span class="tw-text-cool-gray">{{ addons.title }}</span>
+                      <span class="tw-text-marine-blue">
                         {{form.plan_yearly ? `+$${addons.yearly}/yr` : `+$${addons.monthly}/mo`}}
                       </span>
                     </div>
@@ -240,12 +246,12 @@
                   </template>
                 </div>
                 <div class="tw-flex tw-justify-between tw-items-center tw-p-5 tw-mt-2">
-                  <span>
-                    Total (per {{ form.plan_yearly ? 'yearly' : 'monthly' }})
+                  <span class="tw-text-cool-gray">
+                    Total (per {{ form.plan_yearly ? 'year' : 'month' }})
                   </span>
-                  <span>
+                  <b class="tw-text-xl tw-text-purplish-blue">
                     +${{ totalPrice }}/{{ form.plan_yearly ? 'yr' : 'mo' }}
-                  </span>
+                  </b>
                 </div>
               </div>
               <StepperNavigation

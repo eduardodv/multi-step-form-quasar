@@ -6,7 +6,7 @@
         flat
         :ripple="false"
         label="Go Back"
-        class="tw-text-cool-gray tw-normal-case tw-text-base hover:tw-text-marine-blue"
+        class="tw-text-cool-gray tw-normal-case tw-text-base hover:tw-text-marine-blue tw-transition-all"
         @click="handleClickPrevStep"
       />
     </div>
