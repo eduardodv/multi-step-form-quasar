@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
   defineProps({
-    step: Number
+    step: Number,
   })
 
   const emit = defineEmits(['handleClickPrevStep', 'handleClickNextStep'])
